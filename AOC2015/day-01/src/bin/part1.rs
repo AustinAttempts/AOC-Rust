@@ -8,8 +8,16 @@ fn main() {
 // Starting from 0 every '(' is +1 floor and
 // every ')' is -1 floor.
 // returns the final value
-pub fn part1(_input: &str) -> i32 {
-    todo!()
+pub fn part1(input: &str) -> i32 {
+    let mut floor = 0;
+    for elem in input.chars() {
+        match elem {
+            ')' => floor -= 1,
+            '(' => floor += 1,
+            _ => panic!("Unknown character found"),
+        }
+    }
+    floor
 }
 
 #[cfg(test)]
