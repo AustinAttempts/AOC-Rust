@@ -4,7 +4,7 @@ fn main() {
     dbg!(output);
 }
 
-pub fn part1(input: &str) -> String {
+pub fn part1(_input: &str) -> String {
     todo!()
 }
 
