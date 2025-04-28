@@ -12,16 +12,20 @@ fn main() {
 // into the basement.
 //
 // Note: indexing is base 1 not 0!
-pub fn part1(input: &str) -> i32 {
-    let mut floor = 0;
-    for elem in input.chars() {
+pub fn part1(input: &str) -> usize {
+    let mut floor: i32 = 0;
+    for (i, elem) in input.chars().enumerate() {
         match elem {
             ')' => floor -= 1,
             '(' => floor += 1,
             _ => panic!("Unknown character found"),
         }
+
+        if floor < 0 {
+            return i + 1;
+        }
     }
-    floor
+    panic!("Santa never enters basement")
 }
 
 #[cfg(test)]
