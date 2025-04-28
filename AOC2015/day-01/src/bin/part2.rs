@@ -1,7 +1,7 @@
 // Advent of Code 2015 - Day 01: Not Quite Lisp
 fn main() {
     let input = include_str!("./input1.txt");
-    let output = part1(input);
+    let output = part2(input);
     dbg!(output);
 }
 
@@ -12,7 +12,7 @@ fn main() {
 // into the basement.
 //
 // Note: indexing is base 1 not 0!
-pub fn part1(input: &str) -> usize {
+pub fn part2(input: &str) -> usize {
     let mut floor: i32 = 0;
     for (i, elem) in input.chars().enumerate() {
         match elem {
@@ -34,10 +34,10 @@ mod tests {
 
     #[test]
     fn enter_basement() {
-        let result = part1(")");
+        let result = part2(")");
         assert_eq!(result, 1);
 
-        let result = part1("()())");
+        let result = part2("()())");
         assert_eq!(result, 5);
     }
 }
