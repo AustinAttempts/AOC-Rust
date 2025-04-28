@@ -5,7 +5,7 @@ fn main() {
     dbg!(output);
 }
 
-fn part2(input: &str) -> u32 {
+fn part2(input: &str) -> usize {
     todo!();
 }
 
@@ -13,8 +13,14 @@ mod tests {
     use super::*;
 
     #[test]
-    fn wrapping_paper_size() {
-        let result = part2("");
-        assert_eq!(result, 0);
+    fn repeated_houses() {
+        let result = part2(">");
+        assert_eq!(result, 2);
+
+        let result = part2("^>v<");
+        assert_eq!(result, 4);
+
+        let result = part2("^v^v^v^v^v");
+        assert_eq!(result, 2);
     }
 }
