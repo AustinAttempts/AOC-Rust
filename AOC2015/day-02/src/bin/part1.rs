@@ -5,7 +5,9 @@ fn main() {
     dbg!(output);
 }
 
-pub fn part1(input: &str) -> i32 {
+// calculate the total amount of wrapping paper needed:
+// per present = 2(lw + wh + hl) + min(lwh)
+pub fn part1(input: &str) -> u32 {
     todo!();
 }
 
@@ -14,11 +16,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn check1() {
-        let result = part1("");
-        assert_eq!(result, 0);
+    fn wrapping_paper_size() {
+        let result = part1("2x3x4");
+        assert_eq!(result, 58);
 
-        let result = part1("");
-        assert_eq!(result, 0);
+        let result = part1("1x1x10");
+        assert_eq!(result, 43);
     }
 }
