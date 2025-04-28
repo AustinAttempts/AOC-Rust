@@ -7,37 +7,22 @@ fn main() {
 
 // calculate the amount of ribbon necessary for each present
 // ribbon = min_perimeter + lwh
-pub fn part2(input: &str) -> i32 {
-    let mut wrapping_paper_ft = 0;
+pub fn part2(input: &str) -> u32 {
+    let mut ribbon_len = 0;
 
     for lines in input.lines() {
-        let mut box_deminsions: Vec<&str> = lines.split('x').collect();
-        let length: u32 = box_deminsions
-            .pop()
-            .expect("No value found")
-            .parse()
-            .expect("could not parse");
-        let width: u32 = box_deminsions
-            .pop()
-            .expect("No value found")
-            .parse()
-            .expect("could not parse");
-        let height: u32 = box_deminsions
-            .pop()
-            .expect("No value found")
-            .parse()
-            .expect("could not parse");
+        let box_deminsions: Vec<&str> = lines.split('x').collect();
+        let mut deminsions: Vec<u32> = Vec::new();
+        for elem in box_deminsions {
+            deminsions.push(elem.parse().expect("could not parse"));
+        }
+        deminsions.sort();
 
-        // calculate surface area
-        let side1 = length * width;
-        let side2 = width * height;
-        let side3 = height * length;
-        wrapping_paper_ft += 2 * (side1 + side2 + side3);
-        // calulate extra
-        wrapping_paper_ft += side1.min(side2).min(side3);
+        ribbon_len += (2 * deminsions[0]) + (2 * deminsions[1]);
+        ribbon_len += deminsions[0] * deminsions[1] * deminsions[2];
     }
 
-    wrapping_paper_ft
+    ribbon_len
 }
 
 #[cfg(test)]
