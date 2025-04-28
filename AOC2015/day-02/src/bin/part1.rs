@@ -6,7 +6,7 @@ fn main() {
 }
 
 pub fn part1(input: &str) -> i32 {
-    Todo!()
+    todo!();
 }
 
 #[cfg(test)]
@@ -14,7 +14,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn check() {
+    fn check1() {
         let result = part1("");
         assert_eq!(result, 0);
 
