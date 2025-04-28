@@ -8,7 +8,7 @@ fn main() {
     dbg!(output);
 }
 
-#[derive(PartialEq, Hash, Eq, Clone)]
+#[derive(PartialEq, Hash, Eq, Clone, Copy)]
 struct Position {
     x: i32,
     y: i32,
@@ -18,7 +18,7 @@ fn part1(input: &str) -> usize {
     let mut current_position = Position { x: 0, y: 0 };
     let mut visited_houses: HashMap<Position, u32> = HashMap::new();
 
-    visited_houses.insert(current_position.clone(), 1);
+    visited_houses.insert(current_position, 1);
 
     for elem in input.chars() {
         match elem {
@@ -29,7 +29,7 @@ fn part1(input: &str) -> usize {
             _ => panic!("Unknown character parsed"),
         }
 
-        visited_houses.entry(current_position.clone()).or_insert(1);
+        *visited_houses.entry(current_position).or_insert(0) += 1;
     }
 
     visited_houses.len()
