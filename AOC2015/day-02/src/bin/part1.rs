@@ -40,6 +40,28 @@ pub fn part1(input: &str) -> u32 {
     wrapping_paper_ft
 }
 
+// Same as above but the more Rust way
+pub fn part1_rust(input: &str) -> u32 {
+    input
+        .lines()
+        .map(|line| {
+            let mut deminsions: Vec<u32> = line
+                .split('x')
+                .map(|str_numbers| str_numbers.parse().expect("could not parse this number"))
+                .collect();
+            deminsions.sort();
+            // calculate surface area
+            let surface_area = 2
+                * ((deminsions[0] * deminsions[1])
+                    + (deminsions[1] * deminsions[2])
+                    + (deminsions[0] * deminsions[2]));
+            // calulate extra
+            let extra = deminsions[0] * deminsions[1];
+            surface_area + extra
+        })
+        .sum()
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -51,5 +73,17 @@ mod tests {
 
         let result = part1("1x1x10");
         assert_eq!(result, 43);
+    }
+
+    #[test]
+    fn wrapping_paper_size_rust() {
+        let result = part1_rust("2x3x4");
+        assert_eq!(result, 58);
+
+        let result = part1_rust("1x1x10");
+        assert_eq!(result, 43);
+
+        let result = part1_rust(include_str!("./input1.txt"));
+        assert_eq!(result, 1598415);
     }
 }
