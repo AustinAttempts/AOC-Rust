@@ -5,8 +5,39 @@ fn main() {
     dbg!(output);
 }
 
-fn part1(_input: &str) -> usize {
-    todo!();
+// return the number of string that follow these rules
+// 1. conatins at least 3 vowels (a, e, i, o, u)
+// 2. contains at least 1 occurance of a repeated letter (i.e. cc)
+// 3. conatins non of these sequences ("ab", "cd", "pq", "xy")
+fn part1(input: &str) -> usize {
+    let mut nice_strings: Vec<String> = Vec::new();
+    let mut naughty_strings: Vec<String> = Vec::new();
+    let vowels = ['a', 'e', 'i', 'o', 'u'];
+
+    for str in input.lines() {
+        if str.contains("ab") || str.contains("cd") || str.contains("pq") || str.contains("xy") {
+            naughty_strings.push(str.to_string());
+        } else if str
+            .chars()
+            .filter(|c| c.to_lowercase().any(|lc| vowels.contains(&lc)))
+            .count()
+            < 3
+        {
+            naughty_strings.push(str.to_string());
+        } else if str
+            .chars()
+            .zip(str.chars().skip(1))
+            .filter_map(|(a, b)| if a == b { Some(a) } else { None })
+            .count()
+            == 0
+        {
+            naughty_strings.push(str.to_string());
+        } else {
+            nice_strings.push(str.to_string());
+        }
+    }
+
+    nice_strings.len()
 }
 
 #[cfg(test)]
