@@ -35,6 +35,7 @@ fn part1(input: &str) -> usize {
     visited_houses.len()
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
