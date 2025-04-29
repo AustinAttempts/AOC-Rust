@@ -16,6 +16,6 @@ mod tests {
     #[test]
     fn part2_test() {
         let result = part2("");
-        assert_ne!(result, 0);
+        assert_eq!(result, 0);
     }
 }
