@@ -14,7 +14,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_1() {
+    fn test_2() {
         let result = part2("");
         assert_eq!(result, 0);
     }
