@@ -5,7 +5,7 @@ fn main() {
     dbg!(output);
 }
 
-fn part2(input: &str) -> u32 {
+fn part2(_input: &str) -> u32 {
     todo!();
 }
 
