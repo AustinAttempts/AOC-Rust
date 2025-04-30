@@ -1,3 +1,5 @@
+use std::{collections::HashMap, u16};
+
 // Advent of Code 2015 - Day 07: Some Assembly Required
 fn main() {
     let input = include_str!("./input1.txt");
@@ -5,7 +7,6 @@ fn main() {
     dbg!(output);
 }
 
-#[derive(Debug)]
 enum Instruction {
     And {
         lhs: String,
@@ -37,19 +38,20 @@ enum Instruction {
     },
 }
 
-fn part1(input: &str) -> i32 {
+fn part1(input: &str) -> u16 {
+    let mut instuction_map = HashMap::new();
+
     for line in input.lines() {
         let instr = Instruction::from_line(line);
+        instuction_map.insert(instr.out_name(), instr);
     }
-    todo!();
+
+    let mut circuit = HashMap::new();
+    evaluate("a", &instuction_map, &mut circuit)
 }
 
 impl Instruction {
     pub fn from_line(line: &str) -> Self {
-        if let Some(rest) = line.strip_suffix("\n") {
-            return Instruction::from_line(rest);
-        }
-
         let parts: Vec<&str> = line.split(" -> ").collect();
         if parts.len() != 2 {
             panic!("Invalid instruction format: {line}");
@@ -96,6 +98,56 @@ impl Instruction {
             }
         }
     }
+
+    pub fn out_name(&self) -> String {
+        match self {
+            Instruction::And { out, .. } => out.clone(),
+            Instruction::Or { out, .. } => out.clone(),
+            Instruction::Not { out, .. } => out.clone(),
+            Instruction::Lshift { out, .. } => out.clone(),
+            Instruction::Rshift { out, .. } => out.clone(),
+            Instruction::Assign { out, .. } => out.clone(),
+        }
+    }
+}
+
+fn evaluate(
+    wire: &str,
+    instructions: &HashMap<String, Instruction>,
+    circuit: &mut HashMap<String, u16>,
+) -> u16 {
+    if let Ok(val) = wire.parse::<u16>() {
+        return val;
+    }
+
+    if let Some(&val) = circuit.get(wire) {
+        return val;
+    }
+
+    let inst = instructions
+        .get(wire)
+        .expect(&format!("No instruction for wire '{}'", wire));
+    let value = match inst {
+        Instruction::Assign { input, .. } => evaluate(input, instructions, circuit),
+
+        Instruction::And { lhs, rhs, .. } => {
+            evaluate(lhs, instructions, circuit) & evaluate(rhs, instructions, circuit)
+        }
+        Instruction::Or { lhs, rhs, .. } => {
+            evaluate(lhs, instructions, circuit) | evaluate(rhs, instructions, circuit)
+        }
+        Instruction::Not { input, .. } => !evaluate(input, instructions, circuit),
+
+        Instruction::Lshift { input, amount, .. } => {
+            evaluate(input, instructions, circuit) << amount
+        }
+        Instruction::Rshift { input, amount, .. } => {
+            evaluate(input, instructions, circuit) >> amount
+        }
+    };
+
+    circuit.insert(wire.to_string(), value);
+    value
 }
 
 #[cfg(test)]
@@ -210,5 +262,34 @@ mod tests {
             }
             _ => panic!("Expected a NOT instruction"),
         }
+    }
+
+    #[test]
+    fn test_input() {
+        let input = "123 -> x
+456 -> y
+x AND y -> d
+x OR y -> e
+x LSHIFT 2 -> f
+y RSHIFT 2 -> g
+NOT x -> h
+NOT y -> i";
+        let mut instuction_map = HashMap::new();
+
+        for line in input.lines() {
+            let instr = Instruction::from_line(line);
+            instuction_map.insert(instr.out_name(), instr);
+        }
+
+        let mut circuit = HashMap::new();
+
+        assert_eq!(evaluate("d", &instuction_map, &mut circuit), 72);
+        assert_eq!(evaluate("e", &instuction_map, &mut circuit), 507);
+        assert_eq!(evaluate("f", &instuction_map, &mut circuit), 492);
+        assert_eq!(evaluate("g", &instuction_map, &mut circuit), 114);
+        assert_eq!(evaluate("h", &instuction_map, &mut circuit), 65412);
+        assert_eq!(evaluate("i", &instuction_map, &mut circuit), 65079);
+        assert_eq!(evaluate("x", &instuction_map, &mut circuit), 123);
+        assert_eq!(evaluate("y", &instuction_map, &mut circuit), 456);
     }
 }
